@@ -14,8 +14,6 @@ class App extends Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
 
   addContact = (name, number) => {
@@ -31,13 +29,16 @@ class App extends Component {
     ) {
       return alert(`${newContact.name} is already in contacts`);
     } else {
-      this.reset();
       this.setState(prevState => {
         return {
           contacts: [...prevState.contacts, newContact],
         };
       });
     }
+  };
+
+  handleInput = ({ target: { name, value } }) => {
+    this.setState({ [name]: value });
   };
 
   filterContacts = contacts => {
@@ -56,33 +57,12 @@ class App extends Component {
     });
   };
 
-  handleInput = ({ target: { name, value } }) => {
-    this.setState({ [name]: value });
-  };
-
-  onSubmit = e => {
-    const { name, number } = e.target.elements;
-    e.preventDefault();
-    this.addContact(name.value, number.value);
-  };
-
-  reset = () => {
-    this.setState(() => {
-      return { name: '', number: '' };
-    });
-  };
-
   render() {
-    const { name, number, filter, contacts } = this.state;
+    const { filter, contacts } = this.state;
     return (
       <>
         <Section title="Phonebook">
-          <AddContactForm
-            name={name}
-            number={number}
-            handleInput={this.handleInput}
-            onSubmit={this.onSubmit}
-          />
+          <AddContactForm addContact={this.addContact} />
         </Section>
         {contacts.length > 0 && (
           <Section title="Contacts">

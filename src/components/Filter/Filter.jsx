@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 export class Filter extends Component {
   render() {
     const { filter, handleInput } = this.props;
+
     return (
       <>
         <label>

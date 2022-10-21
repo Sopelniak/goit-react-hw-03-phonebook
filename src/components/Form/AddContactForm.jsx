@@ -3,16 +3,38 @@ import PropTypes from 'prop-types';
 import s from './Form.module.scss';
 
 export class AddContactForm extends Component {
+  state = {
+    name: '',
+    number: '',
+  };
+
+  handleInput = ({ target: { name, value } }) => {
+    this.setState({ [name]: value });
+  };
+
+  onSubmit = e => {
+    const { name, number } = e.target.elements;
+    e.preventDefault();
+    this.props.addContact(name.value, number.value);
+    this.reset();
+  };
+
+  reset = () => {
+    this.setState(() => {
+      return { name: '', number: '' };
+    });
+  };
+
   render() {
-    const { name, number, handleInput, onSubmit } = this.props;
+    const { name, number } = this.state;
     return (
       <>
-        <form className={s.form} onSubmit={onSubmit}>
+        <form className={s.form} onSubmit={this.onSubmit}>
           <label>
             <span>Name</span>
 
             <input
-              onChange={handleInput}
+              onChange={this.handleInput}
               value={name}
               placeholder="Andrew Sopelniak"
               type="text"
@@ -26,7 +48,7 @@ export class AddContactForm extends Component {
             <span>Number</span>
 
             <input
-              onChange={handleInput}
+              onChange={this.handleInput}
               value={number}
               placeholder="xxx-xx-xx"
               type="tel"
@@ -44,8 +66,5 @@ export class AddContactForm extends Component {
 }
 
 AddContactForm.propTypes = {
-  name: PropTypes.string.isRequired,
-  number: PropTypes.string.isRequired,
-  handleInput: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
+  addContact: PropTypes.func.isRequired,
 };
